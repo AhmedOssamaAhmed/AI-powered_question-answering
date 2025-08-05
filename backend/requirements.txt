@@ -1,0 +1,43 @@
+# Web Framework
+fastapi==0.116.1
+uvicorn==0.35.0
+gunicorn==23.0.0
+
+# HTTP and Multipart
+python-multipart==0.0.20
+httpx==0.28.1
+
+# Authentication and Security
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+
+# Database
+sqlalchemy==2.0.42
+alembic==1.16.4
+psycopg2-binary==2.9.10
+
+# Configuration and Environment
+python-dotenv==1.1.1
+pydantic[email]==2.11.7
+pydantic-settings==2.10.1
+
+# AI and Language Models
+langchain==0.3.27
+langchain-core==0.3.72
+langchain-openai==0.3.28
+langchain-community==0.3.27
+openai==1.98.0
+
+# Vector Database
+chromadb==1.0.15
+
+# Document Processing
+sentence-transformers==5.0.0
+PyPDF2==3.0.1
+
+# File Type Detection (Windows-compatible)
+python-magic-bin==0.4.14; sys_platform == "win32"
+
+# Testing
+pytest==8.4.1
+pytest-asyncio==1.1.0
