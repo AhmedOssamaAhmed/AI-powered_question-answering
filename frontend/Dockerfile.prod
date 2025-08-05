@@ -9,10 +9,14 @@ COPY package*.json ./
 # Clean install dependencies (handle lock file conflicts)
 RUN rm -f package-lock.json && \
     npm cache clean --force && \
-    npm install --production=false --legacy-peer-deps --no-audit
+    npm install --production=false --force
 
-# Copy source code
-COPY . .
+# Copy source code (explicitly copy public directory first)
+COPY public ./public
+COPY src ./src
+COPY package.json ./
+COPY tailwind.config.js ./
+COPY postcss.config.js ./
 
 # Build the application
 RUN npm run build
