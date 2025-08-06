@@ -100,7 +100,7 @@ npm install
 
 # Start frontend in background
 echo "🚀 Starting frontend server..."
-npm start &
+npm start -- --host 0.0.0.0 &
 FRONTEND_PID=$!
 
 # Wait a moment for frontend to start
