@@ -67,41 +67,79 @@ A comprehensive AI-powered question-answering system built with FastAPI backend 
 
 ### Local Development Setup
 
+#### Option 1: Automated Setup (Recommended)
+
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd ai-chatbot-system
    ```
 
-2. **Set up the backend**
+2. **Start everything with one command**
+   
+   **Windows:**
+   ```bash
+   start-local.bat
+   ```
+   
+   **Linux/Mac:**
+   ```bash
+   ./start-local.sh
+   ```
+
+   This will automatically:
+   - ✅ Check all prerequisites (Python, Node.js, Docker)
+   - 🗄️ Start PostgreSQL in Docker
+   - 🔧 Set up backend environment and dependencies
+   - 🚀 Start backend server
+   - 🎨 Set up frontend dependencies
+   - 🚀 Start frontend server
+
+3. **Access the application**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+   - API Documentation: http://localhost:8000/docs
+
+#### Option 2: Manual Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd ai-chatbot-system
+   ```
+
+2. **Start PostgreSQL with Docker**
+   ```bash
+   # Start PostgreSQL
+   docker-compose up -d postgres
+   
+   # Or use the management script
+   docker-postgres.bat start  # Windows
+   ./docker-postgres.sh start # Linux/Mac
+   ```
+
+3. **Set up the backend**
    ```bash
    cd backend
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    pip install -r requirements.txt
    
    # Set up environment variables
    cp env.example .env
-   # Edit .env with your configuration
+   # Edit .env with your configuration (OpenAI API key required)
    ```
 
-3. **Set up the frontend**
+4. **Set up the frontend**
    ```bash
    cd frontend
    npm install
    ```
 
-4. **Start PostgreSQL database**
-   ```bash
-   # Install PostgreSQL if you haven't already
-   # Create a database named 'ai_qa_db'
-   # Update the DATABASE_URL in backend/.env
-   ```
-
 5. **Start the backend**
    ```bash
    cd backend
-   uvicorn app.main:app --reload
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
 
 6. **Start the frontend**
@@ -131,17 +169,100 @@ A comprehensive AI-powered question-answering system built with FastAPI backend 
 - `POST /qa/ask` - Ask a question
 - `GET /qa/history` - Get query history
 
+## 🐳 Docker Management
+
+### PostgreSQL Container Management
+
+The application uses Docker to run PostgreSQL. You can manage the database using the provided scripts:
+
+#### Windows
+```bash
+# Start PostgreSQL
+docker-postgres.bat start
+
+# Stop PostgreSQL
+docker-postgres.bat stop
+
+# Check status
+docker-postgres.bat status
+
+# View logs
+docker-postgres.bat logs
+
+# Restart
+docker-postgres.bat restart
+
+# Reset database (delete all data)
+docker-postgres.bat reset
+```
+
+#### Linux/Mac
+```bash
+# Start PostgreSQL
+./docker-postgres.sh start
+
+# Stop PostgreSQL
+./docker-postgres.sh stop
+
+# Check status
+./docker-postgres.sh status
+
+# View logs
+./docker-postgres.sh logs
+
+# Restart
+./docker-postgres.sh restart
+
+# Reset database (delete all data)
+./docker-postgres.sh reset
+```
+
+#### Direct Docker Commands
+```bash
+# Start PostgreSQL
+docker-compose up -d postgres
+
+# Stop PostgreSQL
+docker-compose down
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs postgres
+```
+
+### Database Connection Details
+- **Host**: localhost
+- **Port**: 5432
+- **Database**: ai_qa_db
+- **Username**: user
+- **Password**: password
+- **Connection URL**: `postgresql://user:password@localhost:5432/ai_qa_db`
+
 ## 🔧 Configuration
 
 ### Environment Variables
 
 #### Backend (.env)
 ```env
+# Database (automatically configured with Docker)
 DATABASE_URL=postgresql://user:password@localhost:5432/ai_qa_db
+
+# Security
 SECRET_KEY=your-secret-key-here
-OPENAI_API_KEY=your-openai-api-key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# OpenAI (required)
+OPENAI_API_KEY=your-openai-api-key-here
+
+# Vector Database
 CHROMA_PERSIST_DIRECTORY=./chroma_db
+
+# App Settings
 DEBUG=True
+ALLOWED_HOSTS=["*"]
 ```
 
 #### Frontend
@@ -191,11 +312,16 @@ npm test
    ALLOWED_HOSTS=["your-domain.com"]
    ```
 
-2. **Deploy backend to your preferred hosting service**
-   - Render, Railway, Heroku, or AWS
-   - Make sure to set up PostgreSQL database
+2. **Set up production database**
+   - Use a managed PostgreSQL service (AWS RDS, Google Cloud SQL, etc.)
+   - Update DATABASE_URL in production environment
+   - Ensure proper security groups and network access
 
-3. **Deploy frontend**
+3. **Deploy backend to your preferred hosting service**
+   - Render, Railway, Heroku, or AWS
+   - Make sure to set up PostgreSQL database connection
+
+4. **Deploy frontend**
    - Vercel, Netlify, or any static hosting service
    - Update REACT_APP_API_URL to point to your backend
 
@@ -206,6 +332,63 @@ npm test
 - **AWS EC2**: Full control over infrastructure
 - **Vercel**: Frontend deployment
 - **Heroku**: Backend deployment
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### Docker Issues
+```bash
+# Check if Docker is running
+docker info
+
+# Check Docker Compose version
+docker-compose --version
+
+# Restart Docker Desktop if needed
+```
+
+#### PostgreSQL Connection Issues
+```bash
+# Check if PostgreSQL container is running
+docker-compose ps
+
+# View PostgreSQL logs
+docker-compose logs postgres
+
+# Restart PostgreSQL
+docker-compose restart postgres
+```
+
+#### Backend Issues
+```bash
+# Check if virtual environment is activated
+# Windows: .venv\Scripts\activate
+# Linux/Mac: source .venv/bin/activate
+
+# Reinstall dependencies
+pip install -r requirements.txt
+
+# Check if .env file exists and is configured
+ls backend/.env
+```
+
+#### Frontend Issues
+```bash
+# Clear npm cache
+npm cache clean --force
+
+# Reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Getting Help
+
+1. **Check the logs**: Use the management scripts to view logs
+2. **Verify prerequisites**: Ensure all required software is installed
+3. **Check configuration**: Verify environment variables are set correctly
+4. **Restart services**: Use the restart commands if services are stuck
 
 ## 🤝 Contributing
 

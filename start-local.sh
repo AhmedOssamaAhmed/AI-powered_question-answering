@@ -25,15 +25,34 @@ if ! command_exists npm; then
     exit 1
 fi
 
+if ! command_exists docker; then
+    echo "❌ Docker is not installed. Please install Docker"
+    exit 1
+fi
+
+# Check if Docker is running
+if ! docker info > /dev/null 2>&1; then
+    echo "❌ Docker is not running. Please start Docker"
+    exit 1
+fi
+
 echo "✅ Prerequisites check passed"
 
+# Start PostgreSQL with Docker
+echo "🗄️  Starting PostgreSQL with Docker..."
+docker-compose up -d postgres
+
+# Wait for PostgreSQL to be ready
+echo "⏳ Waiting for PostgreSQL to be ready..."
+sleep 10
+
 # Check if PostgreSQL is running
-echo "🗄️  Checking PostgreSQL..."
-if ! pg_isready -h localhost -p 5432 > /dev/null 2>&1; then
-    echo "⚠️  PostgreSQL is not running on localhost:5432"
-    echo "   Please start PostgreSQL and create a database named 'ai_qa_db'"
-    echo "   Then update the DATABASE_URL in backend/.env"
+if ! docker-compose ps postgres | grep -q "Up"; then
+    echo "❌ Failed to start PostgreSQL. Please check Docker is running."
+    exit 1
 fi
+
+echo "✅ PostgreSQL is running on localhost:5432"
 
 # Set up backend
 echo "🔧 Setting up backend..."

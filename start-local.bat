@@ -27,12 +27,44 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM Check if Docker is installed
+docker --version >nul 2>&1
+if errorlevel 1 (
+    echo ❌ Docker is not installed. Please install Docker Desktop
+    pause
+    exit /b 1
+)
+
+REM Check if Docker is running
+docker info >nul 2>&1
+if errorlevel 1 (
+    echo ❌ Docker is not running. Please start Docker Desktop
+    pause
+    exit /b 1
+)
+
 echo ✅ Prerequisites check passed
 
-echo 🗄️  Checking PostgreSQL...
-REM Note: Windows doesn't have pg_isready by default, so we'll skip this check
-echo ⚠️  Please ensure PostgreSQL is running on localhost:5432
-echo    Create a database named 'ai_qa_db' and update DATABASE_URL in backend/.env
+echo 🗄️  Starting PostgreSQL with Docker...
+docker-compose up -d postgres
+
+REM Wait for PostgreSQL to be ready
+echo ⏳ Waiting for PostgreSQL to be ready...
+timeout /t 10 /nobreak >nul
+
+REM Check if PostgreSQL is running
+docker-compose ps postgres | findstr "Up" >nul
+if errorlevel 1 (
+    echo ❌ Failed to start PostgreSQL. Please check:
+    echo    - Docker Desktop is running
+    echo    - Port 5432 is not already in use
+    echo    - Docker has enough resources allocated
+    pause
+    exit /b 1
+)
+
+echo ✅ PostgreSQL is running on localhost:5432
+echo    Database: ai_qa_db | User: user | Password: password
 
 echo 🔧 Setting up backend...
 cd backend
@@ -56,8 +88,8 @@ if not exist ".env" (
     echo ⚙️  Creating .env file from template...
     copy env.example .env
     echo ⚠️  Please edit backend/.env with your configuration
-    echo    - Set your OpenAI API key
-    echo    - Update DATABASE_URL if needed
+    echo    - Set your OpenAI API key (required)
+    echo    - DATABASE_URL is automatically configured for Docker
     echo    - Set a secure SECRET_KEY
 )
 
