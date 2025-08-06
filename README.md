@@ -56,21 +56,16 @@ A comprehensive AI-powered question-answering system built with FastAPI backend 
 - **Lucide React**: Beautiful icons
 - **React Hot Toast**: Toast notifications
 
-### DevOps
-- **Docker**: Containerization
-- **Docker Compose**: Multi-container orchestration
-- **PostgreSQL**: Database container
-
 ## 📋 Prerequisites
 
-- Docker and Docker Compose
+- Node.js 18+ 
+- Python 3.11+
+- PostgreSQL database
 - OpenAI API key
-- Node.js 18+ (for local development)
-- Python 3.11+ (for local development)
 
 ## 🚀 Quick Start
 
-### Using Docker (Recommended)
+### Local Development Setup
 
 1. **Clone the repository**
    ```bash
@@ -78,45 +73,47 @@ A comprehensive AI-powered question-answering system built with FastAPI backend 
    cd ai-chatbot-system
    ```
 
-2. **Set up environment variables**
+2. **Set up the backend**
    ```bash
-   # Create .env file in the root directory
-   echo "OPENAI_API_KEY=your-openai-api-key-here" > .env
+   cd backend
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   
+   # Set up environment variables
+   cp env.example .env
+   # Edit .env with your configuration
    ```
 
-3. **Start the application**
+3. **Set up the frontend**
    ```bash
-   docker-compose up --build
+   cd frontend
+   npm install
    ```
 
-4. **Access the application**
+4. **Start PostgreSQL database**
+   ```bash
+   # Install PostgreSQL if you haven't already
+   # Create a database named 'ai_qa_db'
+   # Update the DATABASE_URL in backend/.env
+   ```
+
+5. **Start the backend**
+   ```bash
+   cd backend
+   uvicorn app.main:app --reload
+   ```
+
+6. **Start the frontend**
+   ```bash
+   cd frontend
+   npm start
+   ```
+
+7. **Access the application**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:8000
    - API Documentation: http://localhost:8000/docs
-
-### Local Development
-
-#### Backend Setup
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-# Set up environment variables
-cp env.example .env
-# Edit .env with your configuration
-
-# Start the backend
-uvicorn app.main:app --reload
-```
-
-#### Frontend Setup
-```bash
-cd frontend
-npm install
-npm start
-```
 
 ## 📚 API Documentation
 
@@ -194,18 +191,21 @@ npm test
    ALLOWED_HOSTS=["your-domain.com"]
    ```
 
-2. **Build and deploy with Docker**
-   ```bash
-   docker-compose -f docker-compose.prod.yml up -d
-   ```
+2. **Deploy backend to your preferred hosting service**
+   - Render, Railway, Heroku, or AWS
+   - Make sure to set up PostgreSQL database
+
+3. **Deploy frontend**
+   - Vercel, Netlify, or any static hosting service
+   - Update REACT_APP_API_URL to point to your backend
 
 ### Cloud Deployment Options
 
 - **Render**: Easy deployment with automatic scaling
-- **Railway**: Simple container deployment
+- **Railway**: Simple deployment with database
 - **AWS EC2**: Full control over infrastructure
 - **Vercel**: Frontend deployment
-- **Heroku**: Container deployment
+- **Heroku**: Backend deployment
 
 ## 🤝 Contributing
 

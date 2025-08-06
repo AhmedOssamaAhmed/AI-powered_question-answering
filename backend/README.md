@@ -5,31 +5,9 @@ A FastAPI-based backend for an AI-powered question-answering system using LangCh
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Docker Desktop installed and running
-- Python 3.11+ (for local development)
-
-### Using Docker (Recommended)
-
-1. **Start the entire system:**
-   ```bash
-   # From the project root
-   docker-compose up -d
-   ```
-
-2. **Start only the backend:**
-   ```bash
-   # From the project root
-   docker-compose up backend
-   ```
-
-3. **Using the convenience scripts:**
-   ```bash
-   # Linux/Mac
-   ./run-backend.sh
-   
-   # Windows
-   run-backend.bat
-   ```
+- Python 3.11+
+- PostgreSQL database
+- OpenAI API key
 
 ### Local Development
 
@@ -46,12 +24,20 @@ A FastAPI-based backend for an AI-powered question-answering system using LangCh
    pip install -r requirements.txt
    ```
 
-3. **Start PostgreSQL (using Docker):**
+3. **Set up PostgreSQL:**
    ```bash
-   docker-compose up postgres -d
+   # Install PostgreSQL if you haven't already
+   # Create a database named 'ai_qa_db'
+   # Update the DATABASE_URL in .env
    ```
 
-4. **Run the backend:**
+4. **Set up environment variables:**
+   ```bash
+   cp env.example .env
+   # Edit .env with your configuration
+   ```
+
+5. **Run the backend:**
    ```bash
    python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
@@ -77,8 +63,6 @@ backend/
 │       └── qa.py            # Question-answering routes
 ├── tests/                   # Test files
 ├── requirements.txt         # Python dependencies
-├── Dockerfile              # Docker configuration
-├── .dockerignore           # Docker ignore file
 └── README.md               # This file
 ```
 
@@ -110,8 +94,8 @@ ALLOWED_HOSTS=["*"]
 
 ### Database Connection
 
-- **Docker**: Uses PostgreSQL container
 - **Local**: Requires PostgreSQL server running on localhost:5432
+- **Production**: Update DATABASE_URL to point to your production database
 
 ## 🛠️ API Endpoints
 
@@ -174,40 +158,15 @@ Run tests with coverage:
 pytest --cov=app
 ```
 
-## 🐳 Docker Commands
-
-### Build and run
-```bash
-# Build the backend image
-docker build -t ai-chatbot-backend .
-
-# Run the backend container
-docker run -p 8000:8000 ai-chatbot-backend
-```
-
-### Development with Docker Compose
-```bash
-# Start all services
-docker-compose up -d
-
-# Start only backend
-docker-compose up backend
-
-# View logs
-docker-compose logs backend
-
-# Stop all services
-docker-compose down
-```
-
 ## 🔍 Troubleshooting
 
 ### Common Issues
 
 1. **PostgreSQL Connection Error**
-   - Ensure PostgreSQL container is running: `docker-compose ps`
+   - Ensure PostgreSQL server is running
    - Check if port 5432 is available
    - Verify database credentials in `.env`
+   - Make sure the database 'ai_qa_db' exists
 
 2. **Python-magic Error (Windows)**
    - The requirements.txt includes `python-magic-bin` for Windows compatibility
@@ -224,14 +183,11 @@ docker-compose down
 ### Logs and Debugging
 
 ```bash
-# View backend logs
-docker-compose logs backend
-
-# View PostgreSQL logs
-docker-compose logs postgres
+# View backend logs (when running with uvicorn)
+# Logs will appear in the terminal where you started the server
 
 # Access PostgreSQL directly
-docker-compose exec postgres psql -U user -d ai_qa_db
+psql -U your_username -d ai_qa_db -h localhost
 ```
 
 ## 📈 Performance Optimization
