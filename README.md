@@ -2,37 +2,19 @@
 
 A comprehensive AI-powered question-answering system built with FastAPI backend and React frontend. This application allows users to upload documents, generate embeddings, and ask questions using an LLM with vector similarity search.
 
+## 🌐 Live Demo
+
+**Test Version**: [http://16.16.129.60:3000/](http://16.16.129.60:3000/)
+
 ## 🚀 Features
 
-### Core Functionality
 - **User Authentication**: Secure JWT-based authentication system
 - **Document Upload**: Support for PDF and TXT files with automatic text extraction
 - **Vector Embeddings**: Document chunking and embedding generation using ChromaDB
 - **AI Question Answering**: LLM-powered responses using OpenAI GPT-3.5-turbo
-- **Query Logging**: Complete history of questions and responses with timing
+- **Query Logging**: Complete history of questions and responses
 - **Multi-user Support**: Isolated document spaces for each user
-
-### User Interface
 - **Modern React Frontend**: Beautiful, responsive UI built with Tailwind CSS
-- **Drag & Drop Upload**: Intuitive file upload interface
-- **Real-time Chat**: Interactive question-answering interface
-- **Document Management**: View and delete uploaded documents
-- **Query History**: Browse past questions and answers
-
-## 🏗️ Architecture
-
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   React Frontend│    │  FastAPI Backend│    │  PostgreSQL DB  │
-│   (Port 3000)   │◄──►│   (Port 8000)   │◄──►│   (Port 5432)   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                │
-                                ▼
-                       ┌─────────────────┐
-                       │   ChromaDB      │
-                       │  Vector Store   │
-                       └─────────────────┘
-```
 
 ## 🛠️ Tech Stack
 
@@ -41,20 +23,14 @@ A comprehensive AI-powered question-answering system built with FastAPI backend 
 - **SQLAlchemy**: SQL toolkit and ORM
 - **PostgreSQL**: Primary database for user data and query logs
 - **ChromaDB**: Vector database for document embeddings
-- **LangChain**: Framework for LLM applications
 - **OpenAI**: GPT-3.5-turbo for question answering
-- **Sentence Transformers**: HuggingFace embeddings for document vectors
-- **PyPDF2**: PDF text extraction
 - **JWT**: Authentication tokens
 
 ### Frontend
 - **React 18**: Modern React with hooks
 - **Tailwind CSS**: Utility-first CSS framework
-- **React Router**: Client-side routing
 - **Axios**: HTTP client
 - **React Dropzone**: File upload component
-- **Lucide React**: Beautiful icons
-- **React Hot Toast**: Toast notifications
 
 ## 📋 Prerequisites
 
@@ -65,9 +41,7 @@ A comprehensive AI-powered question-answering system built with FastAPI backend 
 
 ## 🚀 Quick Start
 
-### Local Development Setup
-
-#### Option 1: Automated Setup (Recommended)
+### Automated Setup (Recommended)
 
 1. **Clone the repository**
    ```bash
@@ -88,37 +62,26 @@ A comprehensive AI-powered question-answering system built with FastAPI backend 
    ```
 
    This will automatically:
-   - ✅ Check all prerequisites (Python, Node.js, Docker)
-   - 🗄️ Start PostgreSQL in Docker
-   - 🔧 Set up backend environment and dependencies
-   - 🚀 Start backend server
-   - 🎨 Set up frontend dependencies
-   - 🚀 Start frontend server
+   - Check all prerequisites (Python, Node.js, Docker)
+   - Start PostgreSQL in Docker
+   - Set up backend environment and dependencies
+   - Start backend server
+   - Set up frontend dependencies
+   - Start frontend server
 
 3. **Access the application**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:8000
    - API Documentation: http://localhost:8000/docs
 
-#### Option 2: Manual Setup
+### Manual Setup
 
-1. **Clone the repository**
+1. **Start PostgreSQL with Docker**
    ```bash
-   git clone <repository-url>
-   cd ai-chatbot-system
-   ```
-
-2. **Start PostgreSQL with Docker**
-   ```bash
-   # Start PostgreSQL
    docker-compose up -d postgres
-   
-   # Or use the management script
-   docker-postgres.bat start  # Windows
-   ./docker-postgres.sh start # Linux/Mac
    ```
 
-3. **Set up the backend**
+2. **Set up the backend**
    ```bash
    cd backend
    python -m venv .venv
@@ -130,28 +93,20 @@ A comprehensive AI-powered question-answering system built with FastAPI backend 
    # Edit .env with your configuration (OpenAI API key required)
    ```
 
-4. **Set up the frontend**
+3. **Set up the frontend**
    ```bash
    cd frontend
    npm install
    ```
 
-5. **Start the backend**
+4. **Start the services**
    ```bash
-   cd backend
+   # Backend (in backend directory)
    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-   ```
-
-6. **Start the frontend**
-   ```bash
-   cd frontend
+   
+   # Frontend (in frontend directory)
    npm start
    ```
-
-7. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
-   - API Documentation: http://localhost:8000/docs
 
 ## 📚 API Documentation
 
@@ -168,77 +123,6 @@ A comprehensive AI-powered question-answering system built with FastAPI backend 
 ### Question Answering Endpoints
 - `POST /qa/ask` - Ask a question
 - `GET /qa/history` - Get query history
-
-## 🐳 Docker Management
-
-### PostgreSQL Container Management
-
-The application uses Docker to run PostgreSQL. You can manage the database using the provided scripts:
-
-#### Windows
-```bash
-# Start PostgreSQL
-docker-postgres.bat start
-
-# Stop PostgreSQL
-docker-postgres.bat stop
-
-# Check status
-docker-postgres.bat status
-
-# View logs
-docker-postgres.bat logs
-
-# Restart
-docker-postgres.bat restart
-
-# Reset database (delete all data)
-docker-postgres.bat reset
-```
-
-#### Linux/Mac
-```bash
-# Start PostgreSQL
-./docker-postgres.sh start
-
-# Stop PostgreSQL
-./docker-postgres.sh stop
-
-# Check status
-./docker-postgres.sh status
-
-# View logs
-./docker-postgres.sh logs
-
-# Restart
-./docker-postgres.sh restart
-
-# Reset database (delete all data)
-./docker-postgres.sh reset
-```
-
-#### Direct Docker Commands
-```bash
-# Start PostgreSQL
-docker-compose up -d postgres
-
-# Stop PostgreSQL
-docker-compose down
-
-# Check status
-docker-compose ps
-
-# View logs
-docker-compose logs postgres
-```
-
-### Database Connection Details
-- **Host**: localhost
-- **Port**: 5432
-- **Database**: ai_qa_db
-- **Username**: user
-- **Password**: password
-- **Connection URL**: `postgresql://user:password@localhost:5432/ai_qa_db`
 
 ## 🔧 Configuration
 
@@ -268,20 +152,6 @@ ALLOWED_HOSTS=["*"]
 #### Frontend
 ```env
 REACT_APP_API_URL=http://localhost:8000
-```
-
-## 🧪 Testing
-
-### Backend Tests
-```bash
-cd backend
-pytest
-```
-
-### Frontend Tests
-```bash
-cd frontend
-npm test
 ```
 
 ## 📊 Usage Guide
@@ -315,7 +185,6 @@ npm test
 2. **Set up production database**
    - Use a managed PostgreSQL service (AWS RDS, Google Cloud SQL, etc.)
    - Update DATABASE_URL in production environment
-   - Ensure proper security groups and network access
 
 3. **Deploy backend to your preferred hosting service**
    - Render, Railway, Heroku, or AWS
@@ -324,14 +193,6 @@ npm test
 4. **Deploy frontend**
    - Vercel, Netlify, or any static hosting service
    - Update REACT_APP_API_URL to point to your backend
-
-### Cloud Deployment Options
-
-- **Render**: Easy deployment with automatic scaling
-- **Railway**: Simple deployment with database
-- **AWS EC2**: Full control over infrastructure
-- **Vercel**: Frontend deployment
-- **Heroku**: Backend deployment
 
 ## 🔧 Troubleshooting
 
@@ -344,8 +205,6 @@ docker info
 
 # Check Docker Compose version
 docker-compose --version
-
-# Restart Docker Desktop if needed
 ```
 
 #### PostgreSQL Connection Issues
@@ -355,9 +214,6 @@ docker-compose ps
 
 # View PostgreSQL logs
 docker-compose logs postgres
-
-# Restart PostgreSQL
-docker-compose restart postgres
 ```
 
 #### Backend Issues
@@ -368,9 +224,6 @@ docker-compose restart postgres
 
 # Reinstall dependencies
 pip install -r requirements.txt
-
-# Check if .env file exists and is configured
-ls backend/.env
 ```
 
 #### Frontend Issues
@@ -383,13 +236,6 @@ rm -rf node_modules package-lock.json
 npm install
 ```
 
-### Getting Help
-
-1. **Check the logs**: Use the management scripts to view logs
-2. **Verify prerequisites**: Ensure all required software is installed
-3. **Check configuration**: Verify environment variables are set correctly
-4. **Restart services**: Use the restart commands if services are stuck
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -400,37 +246,4 @@ npm install
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🐛 Known Limitations
-
-- File size limit: 10MB per document
-- Supported formats: PDF and TXT only
-- Vector search accuracy depends on document quality
-- LLM responses may occasionally be inaccurate
-- No real-time collaboration features
-
-## 🔮 Future Enhancements
-
-- Support for more document formats (DOCX, PPTX, etc.)
-- Real-time collaboration
-- Advanced document preprocessing
-- Custom embedding models
-- API rate limiting
-- Advanced analytics and insights
-- Mobile application
-- Multi-language support
-
-## 📞 Support
-
-For support and questions:
-- Create an issue in the repository
-- Check the API documentation at `/docs`
-- Review the troubleshooting section
-
-## 🙏 Acknowledgments
-
-- OpenAI for providing the GPT API
-- ChromaDB team for the vector database
-- FastAPI and React communities
-- All open-source contributors 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
